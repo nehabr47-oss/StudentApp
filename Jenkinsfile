@@ -19,7 +19,8 @@ pipeline {
                         bat """
                         ${scannerHome}\\bin\\sonar-scanner.bat ^
                         -Dsonar.projectKey=StudentApp ^
-                        -Dsonar.sources=.
+                        -Dsonar.sources=. ^
+                        -Dsonar.scanner.skipJreProvisioning=true
                         """
                     }
                 }
