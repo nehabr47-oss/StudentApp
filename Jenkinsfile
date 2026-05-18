@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        sonarRunner 'SonarScanner'
+    }
+
     stages {
 
         stage('Clone') {
@@ -14,9 +18,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     bat '''
-                    sonar-scanner ^
-                    -Dsonar.projectKey=StudentApp ^
-                    -Dsonar.sources=.
+                    sonar-scanner -Dsonar.projectKey=StudentApp -Dsonar.sources=.
                     '''
                 }
             }
