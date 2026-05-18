@@ -2,12 +2,11 @@ pipeline {
     agent any
 
     tools {
-        sonarQube 'SonarScanner'
+        sonarScanner 'SonarScanner'
     }
 
     stages {
-
-        stage('Git Checkout') {
+        stage('Clone') {
             steps {
                 git 'https://github.com/nehabr47-oss/StudentApp.git'
             }
@@ -16,12 +15,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    bat """
-                    sonar-scanner ^
-                    -Dsonar.projectKey=StudentApp ^
-                    -Dsonar.sources=. ^
-                    -Dsonar.host.url=http://localhost:9000
-                    """
+                    bat 'sonar-scanner -Dsonar.projectKey=StudentApp -Dsonar.sources=.'
                 }
             }
         }
