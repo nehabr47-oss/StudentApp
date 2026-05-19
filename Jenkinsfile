@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "nehabr47/studentapp"
         IMAGE_TAG = "latest"
+        DOCKER_CREDENTIALS = credentials('dockerhub-creds')
     }
 
     stages {
@@ -34,40 +35,26 @@ pipeline {
 
         stage('Trivy File System Scan') {
             steps {
-                bat """
+                bat '''
                 trivy fs .
-                """
+                '''
             }
         }
 
         stage('Docker Build') {
             steps {
-                bat """
+                bat '''
                 docker build -t %IMAGE_NAME%:%IMAGE_TAG% .
-                """
-            }
-        }
-
-        stage('Docker Login') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
-
-                    bat """
-                    docker login -u %DOCKER_USER% -p %DOCKER_PASS%
-                    """
-                }
+                '''
             }
         }
 
         stage('Docker Push') {
             steps {
-                bat """
+                bat '''
+                echo %DOCKER_CREDENTIALS_PSW% | docker login -u %DOCKER_CREDENTIALS_USR% --password-stdin
                 docker push %IMAGE_NAME%:%IMAGE_TAG%
-                """
+                '''
             }
         }
     }
