@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "nehabr47/studentapp"
+        IMAGE_NAME = "nehabr30/studentapp"
         IMAGE_TAG = "latest"
         DOCKER_CREDENTIALS = credentials('dockerhub-creds')
     }
